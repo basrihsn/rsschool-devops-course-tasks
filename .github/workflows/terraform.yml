@@ -1,0 +1,87 @@
+name: Terraform Workflow
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+permissions:
+    id-token: write
+    contents: read
+
+jobs:
+    terraform-check:
+        name: Terraform Format Check
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v3
+              with: 
+                terraform_version: 1.6.6
+            
+            - name: Terraform Format Check
+              run: terraform fmt
+
+    terraform-plan:
+        name: Terraform Plan
+        runs-on: ubuntu-latest
+        needs: terraform-check
+
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v3
+              with:
+                terraform_version: 1.6.6
+            
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                role-to-assume: arn:aws:iam::112865150509:role/GithubActionsRole
+                role-session-name: terraform-github-session
+                aws-region: us-east-1
+
+            - name: Terraform Init
+              run: terraform init
+
+            - name: Terraform Validate
+              run: terraform validate
+
+            - name: Terraform Plan
+              run: terraform plan -input=false
+
+    terraform-apply:
+        name: Terraform Apply
+        runs-on: ubuntu-latest
+        needs: terraform-plan
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v3
+              with:
+                terraform_version: 1.6.6
+
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                role-to-assume: arn:aws:iam::112865150509:role/GithubActionsRole
+                role-session-name: terraform-github-session
+                aws-region: us-east-1
+
+            - name: Terraform Init
+              run: terraform init
+
+            - name: Terraform Apply
+              run: terraform apply -auto-approve -input=false
