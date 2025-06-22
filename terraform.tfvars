@@ -9,5 +9,6 @@ iam_policy_names = [
     "IAMFullAccess",
     "AmazonVPCFullAccess",
     "AmazonSQSFullAccess",
-    "AmazonEventBridgeFullAccess"
+    "AmazonEventBridgeFullAccess",
+    "AmazonDynamoDBFullAccess_v2"
 ]
