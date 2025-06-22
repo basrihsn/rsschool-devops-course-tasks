@@ -37,9 +37,11 @@ resource "aws_iam_role" "github_actions" {
         }
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
+          StringLike = {
+            "token.actions.githubusercontent.com:sub": "repo:basrihsn/rsschool-devops-course-tasks:*"
+          },
           StringEquals = {
-            "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
-            "token.actions.githubusercontent.com:sub": "repo:basrihsn/rsschool-devops-course-tasks:ref:refs/heads/*"
+            "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
           }
         }
       }
