@@ -1,4 +1,4 @@
-# RSSchool DevOps Course Tasks
+# RSSchool DevOps Course Task 1
 
 ## Overview
 
