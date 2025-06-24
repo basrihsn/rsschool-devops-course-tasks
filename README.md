@@ -2,7 +2,7 @@
 
 ## AWS VPC Infrastructure with Terraform
 
-This project contains Terraform configuration to create a robust AWS VPC infrastructure with public and private subnets across multiple Availability Zones.
+This project contains Terraform configuration to create a robust AWS VPC infrastructure with public and private subnets across multiple availability zones.
 
 ## Architecture
 
