@@ -1,7 +1,21 @@
-name: Terraform Destroy Workflow
+name: Terraform Destroy Infrastructure
 
 on:
     workflow_dispatch:
+        inputs:
+            confirm_destroy:
+                description: 'Type "DESTROY" to confirm destruction of all resources'
+                required: true
+                default: ''
+            environment:
+                description: 'Environment to destroy'
+                required: true
+                default: 'dev'
+                type: choice
+                options:
+                - dev
+                - staging
+                - prod
 
 permissions:
     id-token: write
@@ -9,10 +23,18 @@ permissions:
 
 jobs:
     terraform-destroy:
-        name: Terraform Destroy
+        name: 🗑️ Destroy Infrastructure
         runs-on: ubuntu-latest
-
+        
         steps:
+            - name: Validate Destroy Confirmation
+              run: |
+                if [ "${{ github.event.inputs.confirm_destroy }}" != "DESTROY" ]; then
+                  echo "❌ Destroy confirmation failed. You must type 'DESTROY' to proceed."
+                  exit 1
+                fi
+                echo "✅ Destroy confirmation validated"
+
             - name: Checkout code
               uses: actions/checkout@v4
 
@@ -25,11 +47,19 @@ jobs:
               uses: aws-actions/configure-aws-credentials@v4
               with:
                 role-to-assume: arn:aws:iam::112865150509:role/GithubActionsRole
-                role-session-name: terraform-github-session
+                role-session-name: terraform-destroy-session
                 aws-region: us-east-1
 
             - name: Terraform Init
               run: terraform init
 
-            - name: Terraform Destroy
-              run: terraform destroy -auto-approve -input=false -var="public_key=${{ secrets.SSH_PUBLIC_KEY }}" -var="my_ip=${{ secrets.MY_IP }}" 
+            - name: Terraform Plan Destroy
+              run: terraform plan -destroy -var="public_key=${{ secrets.SSH_PUBLIC_KEY }}" -var="my_ip=${{ secrets.MY_IP }}"
+
+            - name: 🗑️ Terraform Destroy
+              run: terraform destroy -auto-approve -input=false -var="public_key=${{ secrets.SSH_PUBLIC_KEY }}" -var="my_ip=${{ secrets.MY_IP }}"
+
+            - name: ✅ Destruction Complete
+              run: |
+                echo "🎉 Infrastructure successfully destroyed!"
+                echo "💰 All AWS resources have been cleaned up." 
