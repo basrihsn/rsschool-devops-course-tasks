@@ -1,0 +1,35 @@
+name: Terraform Destroy Workflow
+
+on:
+    workflow_dispatch:
+
+permissions:
+    id-token: write
+    contents: read
+
+jobs:
+    terraform-destroy:
+        name: Terraform Destroy
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v3
+              with:
+                terraform_version: 1.6.6
+
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                role-to-assume: arn:aws:iam::112865150509:role/GithubActionsRole
+                role-session-name: terraform-github-session
+                aws-region: us-east-1
+
+            - name: Terraform Init
+              run: terraform init
+
+            - name: Terraform Destroy
+              run: terraform destroy -auto-approve -input=false -var="public_key=${{ secrets.SSH_PUBLIC_KEY }}" -var="my_ip=${{ secrets.MY_IP }}" 
