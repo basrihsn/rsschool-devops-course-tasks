@@ -12,12 +12,12 @@ resource "aws_key_pair" "main" {
 
 # Combined Bastion/NAT Host in AZ-1 public subnet
 resource "aws_instance" "bastion_nat" {
-  ami                     = data.aws_ami.amazon_linux.id
-  instance_type           = var.instance_type
-  key_name                = aws_key_pair.main.key_name
-  subnet_id               = aws_subnet.public[0].id  # AZ-1 public subnet
-  vpc_security_group_ids  = [aws_security_group.bastion_nat.id]
-  source_dest_check       = false  # Important for NAT functionality
+  ami                         = data.aws_ami.amazon_linux.id
+  instance_type               = var.instance_type
+  key_name                    = aws_key_pair.main.key_name
+  subnet_id                   = aws_subnet.public[0].id # AZ-1 public subnet
+  vpc_security_group_ids      = [aws_security_group.bastion_nat.id]
+  source_dest_check           = false # Important for NAT functionality
   associate_public_ip_address = true
 
   user_data = <<-EOF

@@ -76,13 +76,13 @@ resource "aws_security_group" "public_web" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # SSH from bastion
+  # SSH from bastion/NAT
   ingress {
-    description     = "SSH from bastion"
+    description     = "SSH from bastion/NAT"
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
-    security_groups = [aws_security_group.bastion.id]
+    security_groups = [aws_security_group.bastion_nat.id]
   }
 
   # All outbound traffic

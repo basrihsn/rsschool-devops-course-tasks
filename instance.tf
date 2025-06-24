@@ -3,11 +3,11 @@
 
 # Public instance in AZ-2 only (us-east-1b)
 resource "aws_instance" "public_web_az2" {
-  ami                    = data.aws_ami.amazon_linux.id
-  instance_type          = var.instance_type
-  key_name               = aws_key_pair.main.key_name
-  subnet_id              = aws_subnet.public[1].id  # AZ-2 public subnet
-  vpc_security_group_ids = [aws_security_group.public_web.id]
+  ami                         = data.aws_ami.amazon_linux.id
+  instance_type               = var.instance_type
+  key_name                    = aws_key_pair.main.key_name
+  subnet_id                   = aws_subnet.public[1].id # AZ-2 public subnet
+  vpc_security_group_ids      = [aws_security_group.public_web.id]
   associate_public_ip_address = true
 
   user_data = <<-EOF
@@ -33,7 +33,7 @@ resource "aws_instance" "private_app_az1" {
   ami                    = data.aws_ami.amazon_linux.id
   instance_type          = var.instance_type
   key_name               = aws_key_pair.main.key_name
-  subnet_id              = aws_subnet.private[0].id  # AZ-1 private subnet
+  subnet_id              = aws_subnet.private[0].id # AZ-1 private subnet
   vpc_security_group_ids = [aws_security_group.private.id]
 
   user_data = <<-EOF
@@ -62,7 +62,7 @@ resource "aws_instance" "private_app_az2" {
   ami                    = data.aws_ami.amazon_linux.id
   instance_type          = var.instance_type
   key_name               = aws_key_pair.main.key_name
-  subnet_id              = aws_subnet.private[1].id  # AZ-2 private subnet
+  subnet_id              = aws_subnet.private[1].id # AZ-2 private subnet
   vpc_security_group_ids = [aws_security_group.private.id]
 
   user_data = <<-EOF

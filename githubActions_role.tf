@@ -19,10 +19,10 @@ resource "aws_iam_role" "github_actions" {
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
           StringLike = {
-            "token.actions.githubusercontent.com:sub": "repo:basrihsn/rsschool-devops-course-tasks:*"
+            "token.actions.githubusercontent.com:sub" : "repo:basrihsn/rsschool-devops-course-tasks:*"
           },
           StringEquals = {
-            "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
+            "token.actions.githubusercontent.com:aud" : "sts.amazonaws.com"
           }
         }
       }
@@ -32,8 +32,8 @@ resource "aws_iam_role" "github_actions" {
 
 # Attach the policies to the GitHub Actions role
 resource "aws_iam_role_policy_attachment" "github_actions_policies" {
-  for_each   = toset(var.iam_policy_names)
+  for_each = toset(var.iam_policy_names)
 
-  role       = aws_iam_role.github_actions.name 
+  role       = aws_iam_role.github_actions.name
   policy_arn = "arn:aws:iam::aws:policy/${each.value}"
 }
