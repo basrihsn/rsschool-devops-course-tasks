@@ -1,7 +1,11 @@
 variable "aws_region" {
   description = "AWS region for resources"
   type        = string
-  default     = "us-west-2"
+}
+
+variable "iam_policy_names" {
+  description = "List of AWS managed IAM policy names to attach to the GitHub Actions role"
+  type        = list(string)
 }
 
 variable "vpc_cidr" {
