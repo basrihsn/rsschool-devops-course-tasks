@@ -75,6 +75,14 @@ resource "aws_route_table" "private" {
   }
 }
 
+# Route for private subnets to bastion/NAT instance
+resource "aws_route" "private_nat" {
+  route_table_id         = aws_route_table.private.id
+  destination_cidr_block = "0.0.0.0/0"
+  network_interface_id   = aws_instance.bastion_nat.primary_network_interface_id
+  depends_on             = [aws_instance.bastion_nat]
+}
+
 # Public Route Table Associations
 resource "aws_route_table_association" "public" {
   count = length(aws_subnet.public)

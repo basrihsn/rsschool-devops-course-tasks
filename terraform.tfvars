@@ -20,4 +20,12 @@ private_subnet_cidrs = ["10.0.10.0/24", "10.0.20.0/24"]
 availability_zones = ["us-east-1a", "us-east-1b"]
 
 project_name = "rsschool-devops"
-environment  = "dev" 
+environment  = "dev"
+
+# SSH Key Configuration
+key_pair_name = "rsschool-key"
+public_key    = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDY..."  # Replace with your actual public key content
+my_ip         = "0.0.0.0/0"  # Change this to your IP address for better security (e.g., "1.2.3.4/32")
+
+# Instance Configuration
+instance_type = "t3.micro" 
