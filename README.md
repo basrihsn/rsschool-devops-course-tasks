@@ -1,5 +1,4 @@
-# rsschool-devops-course-tasks
+# RSSchool DevOps Course Task 2
+ 
 
-* [Task 1](https://github.com/basrihsn/rsschool-devops-course-tasks/tree/task_1)
-
-* [Task 2](https://github.com/basrihsn/rsschool-devops-course-tasks/tree/task_2)
+ ... coming soon
