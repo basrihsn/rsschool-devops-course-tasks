@@ -3,6 +3,18 @@ resource "aws_iam_openid_connect_provider" "github" {
   url             = "https://token.actions.githubusercontent.com"
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = ["6938fd4d98bab03faadb97b343e59a7684ecb4ae"]
+
+  # Protect this critical resource from accidental destruction
+  lifecycle {
+    prevent_destroy = true
+  }
+
+  tags = {
+    Name        = "GitHub-Actions-OIDC-Provider"
+    Purpose     = "GitHub Actions authentication"
+    Environment = "global"
+    Critical    = "true"
+  }
 }
 
 # Create an IAM role for GitHub Actions
@@ -19,21 +31,38 @@ resource "aws_iam_role" "github_actions" {
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
           StringLike = {
-            "token.actions.githubusercontent.com:sub" : "repo:basrihsn/rsschool-devops-course-tasks:*"
+            "token.actions.githubusercontent.com:sub": "repo:basrihsn/rsschool-devops-course-tasks:*"
           },
           StringEquals = {
-            "token.actions.githubusercontent.com:aud" : "sts.amazonaws.com"
+            "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
           }
         }
       }
     ]
   })
+
+  # Protect this critical resource from accidental destruction
+  lifecycle {
+    prevent_destroy = true
+  }
+
+  tags = {
+    Name        = "GitHub-Actions-Role"
+    Purpose     = "GitHub Actions execution role"
+    Environment = "global"
+    Critical    = "true"
+  }
 }
 
 # Attach the policies to the GitHub Actions role
 resource "aws_iam_role_policy_attachment" "github_actions_policies" {
-  for_each = toset(var.iam_policy_names)
+  for_each   = toset(var.iam_policy_names)
 
-  role       = aws_iam_role.github_actions.name
+  role       = aws_iam_role.github_actions.name 
   policy_arn = "arn:aws:iam::aws:policy/${each.value}"
+
+  # Protect these critical policy attachments from accidental destruction
+  lifecycle {
+    prevent_destroy = true
+  }
 }
