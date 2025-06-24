@@ -4,11 +4,6 @@ resource "aws_iam_openid_connect_provider" "github" {
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = ["6938fd4d98bab03faadb97b343e59a7684ecb4ae"]
 
-  # Protect this critical resource from accidental destruction
-  lifecycle {
-    prevent_destroy = true
-  }
-
   tags = {
     Name        = "GitHub-Actions-OIDC-Provider"
     Purpose     = "GitHub Actions authentication"
@@ -41,11 +36,6 @@ resource "aws_iam_role" "github_actions" {
     ]
   })
 
-  # Protect this critical resource from accidental destruction
-  lifecycle {
-    prevent_destroy = true
-  }
-
   tags = {
     Name        = "GitHub-Actions-Role"
     Purpose     = "GitHub Actions execution role"
@@ -60,9 +50,4 @@ resource "aws_iam_role_policy_attachment" "github_actions_policies" {
 
   role       = aws_iam_role.github_actions.name 
   policy_arn = "arn:aws:iam::aws:policy/${each.value}"
-
-  # Protect these critical policy attachments from accidental destruction
-  lifecycle {
-    prevent_destroy = true
-  }
 }
