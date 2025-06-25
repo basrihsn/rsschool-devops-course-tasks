@@ -2,7 +2,7 @@
 
 This guide will help you verify that your AWS infrastructure is working correctly after deployment.
 
-## 📋 Prerequisites
+## 📋 Prerequisites 
 
 Before testing, ensure you have:
 - ✅ Infrastructure deployed via GitHub Actions
